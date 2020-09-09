@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <title>Near Store Assignment</title>
+    <style>
+      .footer {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+    </style>
+  </head>
+  <body class="bg-light" style="height: 100vh">
+    <div class="container">
+      <!-- Task List -->
+      <h2 class="display-6"><small class="text-muted">Tasks:</small></h2>
+      <div class="alert alert-success mx-auto mt-2">
+        <p>
+          <u>Task</u>: Fetch the 2 oldest people in each group from MySql
+          database &#9989;
+        </p>
+        <p><u>Task</u>: Results in alphabetical order for each group &#9989;</p>
+        <p><u>Task</u>: Populate the results in bootstrap table &#9989;</p>
+        <p>
+          <u>Task</u>: Added an extra group 'Group 3' of data as test case
+          &#9989;
+        </p>
+        <p><u>Technologies used</u>: NodeJS, MySql, Bootstrap &#9989;</p>
+      </div>
+
+      <!-- Required Data Table -->
+      <h2 class="display-6"><small class="text-muted">People Data:</small></h2>
+      <table class="table table-light border text-center mx-auto">
+        <thead class="thead-dark">
+          <th scope="col">Person</th>
+          <th scope="col">Group</th>
+          <th scope="col">Age</th>
+        </thead>
+        <!-- Id set as 'people' so it can accessed easily and can be editing using JS -->
+        <!-- The innerHTML is set dynamically -->
+        <tbody id="people"></tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <footer class="sticky text-right m-0 p-0 footer">
+      <h6 class="text-muted m-0 p-1">
+        Kaustubh Deshpande Coding Assignment Submission
+      </h6>
+    </footer>
+
+    <script>
+      // The element is fetch so that the innerHTML can be changed
+      const peopleTable = document.getElementById("people");
+
+      // Every person's data is passed to this function which then adds styling to individual parameters
+      const loadPersonRow = (person) => {
+        const personRow =
+          "<tr><td>" +
+          person.Person +
+          "</td><td>" +
+          person.Ingroup +
+          "</td><td>" +
+          person.Age +
+          "</td></tr>";
+        return personRow;
+      };
+
+      const fetchPeopleData = () => {
+        // This is so that everytime the page loads, a call to the '/data' url is made and whatever data is received , is then broken down and used to render each element
+
+        const xhr = new XMLHttpRequest();
+        const method = "GET";
+        const url = "/data";
+        const responseType = "json";
+
+        xhr.responseType = responseType;
+
+        xhr.open(method, url);
+        xhr.onload = function () {
+          const serverResponse = xhr.response;
+          const people = serverResponse;
+
+          var finalPersonRender = "";
+
+          // We iterate through each element in the array recieved and then pass it to the other function which styles it
+
+          for (i = 0; i < people.length; i++) {
+            let onePerson = loadPersonRow(people[i]);
+            finalPersonRender = finalPersonRender + onePerson;
+          }
+          peopleTable.innerHTML = finalPersonRender;
+        };
+        xhr.send();
+      };
+
+      // function is executed everytime the page loads
+
+      fetchPeopleData();
+    </script>
+  </body>
+</html>
